@@ -27,10 +27,10 @@ class Onebox::Engine::WeasylSubmissionOnebox
 			api_submissionUrl = "https://www.weasyl.com/api/submissions/#{submissionId}/view"
 			title = api_submissionUrl;
 			result = JSON.parse(open(api_submissionUrl));
-			
-			description = result.dig('description');
-			title = result.dig('title');
-			imageUrl = result.dig('media', 'thumbnail', 'url');
+
+			#description = result.dig('description');
+			title = result["title"];
+			#imageUrl = result.dig('media', 'thumbnail', 'url');
 
 		rescue StandardError => err
 			title = "Error";
