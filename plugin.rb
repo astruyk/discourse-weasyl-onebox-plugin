@@ -1,8 +1,8 @@
-# name: discourse-furaffinity-onebox
-# about: Adds support for properly embedding Furaffinity submissions as OneBox items in Discourse
+# name: discourse-weasyl-onebox-plugin
+# about: Adds support for properly embedding Weasyl submissions as OneBox items in Discourse
 # version: 1.0
 # authors: Anton Struyk
-# url: https://github.com/astruyk/discourse-furaffinity-onebox
+# url: https://github.com/astruyk/discourse-weasyl-onebox-plugin
 
 require "net/http"
 require "uri"
