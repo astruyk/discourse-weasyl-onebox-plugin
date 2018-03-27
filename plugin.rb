@@ -41,7 +41,7 @@ class Onebox::Engine::WeasylSubmissionOnebox
 			<aside class="onebox whitelistedgeneric">
 				<header class="source">
 					<img src="#{iconUrl}" class="site-icon" style="width: 16px; height: 16px" >
-					<a href="#{linkUrl}" target="_blank" rel="nofollow noopener">furAffinity.net</a>
+					<a href="#{linkUrl}" target="_blank" rel="nofollow noopener">weasyl.com</a>
 				</header>
 				<article class="onebox-body">
 					<img src="#{imageUrl}" class="thumbnail size-resolved" />
