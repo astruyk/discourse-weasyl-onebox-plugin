@@ -26,11 +26,14 @@ class Onebox::Engine::WeasylSubmissionOnebox
 			# Weasyl exposes an HTTP API, so we can get JSON objects directly from it.
 			submissionId = @url.match(REGEX)[:id];
 			api_submissionUrl = "https://www.weasyl.com/api/submissions/#{submissionId}/view"
-			result = JSON.parse(open(api_submissionUrl).read);
+			title = api_submissionUrl;
+			contents = open(api_submissionUrl).read;
+			description = contents;
+			# result = JSON.parse(contents);
 
-			description = result.dig('description');
-			title = result.dig('title');
-			imageUrl = result.dig('media', 'thumbnail_generated', 'url');
+			# description = result.dig('description');
+			# title = result.dig('title');
+			# imageUrl = result.dig('media', 'thumbnail_generated', 'url');
 
 		rescue StandardError => err
 			title = "Error";
