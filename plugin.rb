@@ -33,7 +33,7 @@ class Onebox::Engine::WeasylSubmissionOnebox
 			if !result.try(:[], "media").try(:[], "thumbnail").nil?
 				imageUrl = result.try(:[], "media").try(:[], "thumbnail")[0].try(:[], "url") || imageUrl;
 			end
-		rescue ::OpenURI::HTTPError => error
+		rescue Exception
 			title = "Rating Restricted Submission"
 			description = "This submission information is hidden because it is marked as NSFW."
 		end
