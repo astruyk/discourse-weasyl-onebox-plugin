@@ -23,7 +23,7 @@ class Onebox::Engine::WeasylSubmissionOnebox
 
 		# Weasyl exposes an HTTP API, so we can get JSON objects directly from it.
 		submissionId = @url.match(REGEX)[:id];
-		api_submissionUrl = "https://www.weasyl.com/api/submissions/#{submissionId}/view"
+		api_submissionUrl = "https://www.weasyl.com/api/submissions/#{submissionId}/view";
 		title = api_submissionUrl;
 		begin
 			json = open(api_submissionUrl).read;
@@ -33,9 +33,9 @@ class Onebox::Engine::WeasylSubmissionOnebox
 			if !result.try(:[], "media").try(:[], "thumbnail").nil?
 				imageUrl = result.try(:[], "media").try(:[], "thumbnail")[0].try(:[], "url") || imageUrl;
 			end
-		rescue Exception
-			title = "Rating Restricted Submission"
-			description = "This submission information is hidden because it is marked as NSFW."
+		rescue
+			title = "Rating Restricted Submission";
+			description = "This submission information is hidden because it is marked as NSFW.";
 		end
 
 		<<-HTML
