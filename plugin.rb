@@ -21,26 +21,21 @@ class Onebox::Engine::WeasylSubmissionOnebox
 		imageUrl = "https://cdn.weasyl.com/static/images/logo.png";
 		iconUrl = "https://cdn.weasyl.com/static/images/favicon.png";
 
+		# Weasyl exposes an HTTP API, so we can get JSON objects directly from it.
+		submissionId = @url.match(REGEX)[:id];
+		api_submissionUrl = "https://www.weasyl.com/api/submissions/#{submissionId}/view"
+		title = api_submissionUrl;
 		begin
-			# Weasyl exposes an HTTP API, so we can get JSON objects directly from it.
-			submissionId = @url.match(REGEX)[:id];
-			api_submissionUrl = "https://www.weasyl.com/api/submissions/#{submissionId}/view"
-			title = api_submissionUrl;
-			begin
-				json = open(api_submissionUrl).read;
-				result = ::JSON.parse(json);
-				description = result.try(:[], "description") || description;
-				title = result.try(:[], "title") || title;
-				if !result.try(:[], "media").try(:[], "thumbnail").nil?
-					imageUrl = result.try(:[], "media").try(:[], "thumbnail")[0].try(:[], "url") || imageUrl;
-				end
-			rescue
-				title = "Rating Restricted Submission"
-				description = "This submission information is hidden because it is marked as NSFW."
+			json = open(api_submissionUrl).read;
+			result = ::JSON.parse(json);
+			description = result.try(:[], "description") || description;
+			title = result.try(:[], "title") || title;
+			if !result.try(:[], "media").try(:[], "thumbnail").nil?
+				imageUrl = result.try(:[], "media").try(:[], "thumbnail")[0].try(:[], "url") || imageUrl;
 			end
-		rescue => err
-			title = "Error";
-			description = err.message + "\n\n" + err.backtrace;
+		rescue ::OpenURI::HTTPError => error
+			title = "Rating Restricted Submission"
+			description = "This submission information is hidden because it is marked as NSFW."
 		end
 
 		<<-HTML
