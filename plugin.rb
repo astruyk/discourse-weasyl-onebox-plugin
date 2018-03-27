@@ -12,7 +12,7 @@ class Onebox::Engine::WeasylSubmissionOnebox
 	include Onebox::Engine
 
 	# Example submission URL is https://www.weasyl.com/~pandapaco/submissions/1616105/ball-of-yarn
-	REGEX = /^https?:\/\/(?:www\.)?weasyl\.com\/~[0-9a-zA-z-_]*?\/submissions\/(?<id>[0-9]+)\/(?:.)*$/
+	REGEX = /^https?:\/\/(?:www\.)?weasyl\.com\/~[0-9a-zA-z\-_]*?\/submissions\/(?<id>[0-9]+)\/(?:.)*$/
 	matches_regexp REGEX
 
 	def to_html
