@@ -21,7 +21,6 @@ class Onebox::Engine::WeasylSubmissionOnebox
 		imageUrl = "https://cdn.weasyl.com/static/images/logo.png";
 		iconUrl = "https://cdn.weasyl.com/static/images/favicon.png";
 
-
 		begin
 			# Weasyl exposes an HTTP API, so we can get JSON objects directly from it.
 			submissionId = @url.match(REGEX)[:id];
@@ -30,11 +29,22 @@ class Onebox::Engine::WeasylSubmissionOnebox
 			json = open(api_submissionUrl).read;
 			result = ::JSON.parse(json);
 
-			description = result["description"];
-			title = result["title"];
-			imageUrl = result["media"]["thumbnail"][0]["url"];
+			if result.try("error").try("name") == "RatingExceeded"
+				title = "NSFW Submission"
+				description = "This submission information is hidden because it is marked as NSFW."
+			else
+				description ||= result.try("description");
+				title ||= result.try("title");
+				if !result.try("media").try("thumbnail").nil?
+					imageUrl ||= result.try("media").try("thumbnail")[0].try("url");
+				end
+			end
+		rescue => err
+			title = "Error";
+			description = err.message + "\n\n" + err.backtrace;
+		end
 
-			<<-HTML
+		<<-HTML
 				<aside class="onebox whitelistedgeneric">
 					<header class="source">
 						<img src="#{iconUrl}" class="site-icon" style="width: 16px; height: 16px" >
@@ -48,9 +58,5 @@ class Onebox::Engine::WeasylSubmissionOnebox
 					</article>
 				</aside>
 			HTML
-		rescue => err
-			title = "Error";
-			description = err.message + "\n\n" + err.backtrace;
-		end
 	end
 end
