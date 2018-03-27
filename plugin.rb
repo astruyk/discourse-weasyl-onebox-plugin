@@ -26,17 +26,17 @@ class Onebox::Engine::WeasylSubmissionOnebox
 			submissionId = @url.match(REGEX)[:id];
 			api_submissionUrl = "https://www.weasyl.com/api/submissions/#{submissionId}/view"
 			title = api_submissionUrl;
-			json = open(api_submissionUrl).read;
-			if json.nil?
-				title = "Rating Restricted Submission"
-				description = "This submission information is hidden because it is marked as NSFW."
-			else
+			begin
+				json = open(api_submissionUrl).read;
 				result = ::JSON.parse(json);
 				description = result.try(:[], "description") || description;
 				title = result.try(:[], "title") || title;
 				if !result.try(:[], "media").try(:[], "thumbnail").nil?
 					imageUrl = result.try(:[], "media").try(:[], "thumbnail")[0].try(:[], "url") || imageUrl;
 				end
+			rescue
+				title = "Rating Restricted Submission"
+				description = "This submission information is hidden because it is marked as NSFW."
 			end
 		rescue => err
 			title = "Error";
