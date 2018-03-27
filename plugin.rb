@@ -30,9 +30,9 @@ class Onebox::Engine::WeasylSubmissionOnebox
 			json = open(api_submissionUrl).read;
 			result = ::JSON.parse(json);
 
-			description = result;
-			#title = result["title"];
-			#imageUrl = result.dig('media', 'thumbnail', 'url');
+			description = result["description"];
+			title = result["title"];
+			imageUrl = result.dig('media', 'thumbnail', 'url');
 
 			<<-HTML
 				<aside class="onebox whitelistedgeneric">
