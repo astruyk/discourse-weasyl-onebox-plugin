@@ -33,10 +33,10 @@ class Onebox::Engine::WeasylSubmissionOnebox
 				title = "NSFW Submission"
 				description = "This submission information is hidden because it is marked as NSFW."
 			else
-				description ||= result.try("description");
-				title ||= result.try("title");
+				description = result.try("description") || description;
+				title = result.try("title") || title;
 				if !result.try("media").try("thumbnail").nil?
-					imageUrl ||= result.try("media").try("thumbnail")[0].try("url");
+					imageUrl = result.try("media").try("thumbnail")[0].try("url") || imageUrl;
 				end
 			end
 		rescue => err
