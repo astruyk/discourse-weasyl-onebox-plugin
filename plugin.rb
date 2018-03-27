@@ -22,20 +22,20 @@ class Onebox::Engine::WeasylSubmissionOnebox
 		imageUrl = "https://cdn.weasyl.com/static/images/logo.png";
 		iconUrl = "https://cdn.weasyl.com/static/images/favicon.png";
 
-		# begin
-		# 	# Weasyl exposes an HTTP API, so we can get JSON objects directly from it.
-		# 	submissionId = @url.match(REGEX)[:id];
-		# 	api_submissionUrl = "https://www.weasyl.com/api/submissions/#{submissionId}/view"
-		# 	result = JSON.parse(open(api_submissionUrl).read);
+		begin
+			# Weasyl exposes an HTTP API, so we can get JSON objects directly from it.
+			submissionId = @url.match(REGEX)[:id];
+			api_submissionUrl = "https://www.weasyl.com/api/submissions/#{submissionId}/view"
+			result = JSON.parse(open(api_submissionUrl).read);
 
-		# 	description = result.dig('description');
-		# 	title = result.dig('title');
-		# 	imageUrl = result.dig('media', 'thumbnail_generated', 'url');
+			description = result.dig('description');
+			title = result.dig('title');
+			imageUrl = result.dig('media', 'thumbnail_generated', 'url');
 
-		# rescue StandardError => err
-		# 	title = "Error";
-		# 	description = err.message + "\n\n" + err.backtrace;
-		# end
+		rescue StandardError => err
+			title = "Error";
+			description = err.message + "\n\n" + err.backtrace;
+		end
 
 		<<-HTML
 			<aside class="onebox whitelistedgeneric">
