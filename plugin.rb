@@ -27,17 +27,16 @@ class Onebox::Engine::WeasylSubmissionOnebox
 			api_submissionUrl = "https://www.weasyl.com/api/submissions/#{submissionId}/view"
 			title = api_submissionUrl;
 			json = open(api_submissionUrl).read;
-			result = ::JSON.parse(json);
-
-			description = result.try(:[], "description") || description;
-			title = result.try(:[], "title") || title;
-			if !result.try(:[], "media").try(:[], "thumbnail").nil?
-				imageUrl = result.try(:[], "media").try(:[], "thumbnail")[0].try(:[], "url") || imageUrl;
-			end
-
-			if result.try(:[], "error").try(:[], "name") == "RatingExceeded"
+			if json.nil?
 				title = "Rating Restricted Submission"
 				description = "This submission information is hidden because it is marked as NSFW."
+			else
+				result = ::JSON.parse(json);
+				description = result.try(:[], "description") || description;
+				title = result.try(:[], "title") || title;
+				if !result.try(:[], "media").try(:[], "thumbnail").nil?
+					imageUrl = result.try(:[], "media").try(:[], "thumbnail")[0].try(:[], "url") || imageUrl;
+				end
 			end
 		rescue => err
 			title = "Error";
