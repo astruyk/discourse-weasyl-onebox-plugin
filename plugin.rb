@@ -26,12 +26,12 @@ class Onebox::Engine::WeasylSubmissionOnebox
 			submissionId = @url.match(REGEX)[:id];
 			api_submissionUrl = "https://www.weasyl.com/api/submissions/#{submissionId}/view"
 			title = api_submissionUrl;
-			result = JSON.parse(open(api_submissionUrl));
+			json = open(api_submissionUrl).read;
+			result = JSON.parse(json);
 
-			#description = result.dig('description');
-			title = result["title"];
+			description = json;
+			#title = result["title"];
 			#imageUrl = result.dig('media', 'thumbnail', 'url');
-
 		rescue StandardError => err
 			title = "Error";
 			description = err.message + "\n\n" + err.backtrace;
