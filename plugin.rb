@@ -4,7 +4,8 @@
 # authors: Anton Struyk
 # url: https://github.com/astruyk/discourse-weasyl-onebox-plugin
 
-require 'open-uri'
+require 'net/http'
+require 'uri'
 require 'json'
 
 class Onebox::Engine::WeasylSubmissionOnebox
@@ -26,7 +27,7 @@ class Onebox::Engine::WeasylSubmissionOnebox
 		api_submissionUrl = "https://www.weasyl.com/api/submissions/#{submissionId}/view";
 		title = api_submissionUrl;
 		begin
-			json = open(api_submissionUrl).read;
+			json = ::Net::HTTP.get(::URI.parse(api_submissionUrl));
 			result = ::JSON.parse(json);
 			description = result.try(:[], "description") || description;
 			title = result.try(:[], "title") || title;
