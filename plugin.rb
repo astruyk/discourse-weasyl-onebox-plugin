@@ -32,7 +32,7 @@ class Onebox::Engine::WeasylSubmissionOnebox
 
 			description = result["description"];
 			title = result["title"];
-			#imageUrl = result.dig('media', 'thumbnail', 'url');
+			imageUrl = result["media"]["thumbnail"][0]["url"];
 
 			<<-HTML
 				<aside class="onebox whitelistedgeneric">
