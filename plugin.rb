@@ -27,7 +27,7 @@ class Onebox::Engine::WeasylSubmissionOnebox
 			api_submissionUrl = "https://www.weasyl.com/api/submissions/#{submissionId}/view"
 			title = api_submissionUrl;
 			json = open(api_submissionUrl).read;
-			result = JSON.parse(json);
+			#result = JSON.parse(json);
 
 			description = json;
 			#title = result["title"];
