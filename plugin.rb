@@ -4,9 +4,7 @@
 # authors: Anton Struyk
 # url: https://github.com/astruyk/discourse-weasyl-onebox-plugin
 
-require 'net/http'
-require 'uri'
-require 'json'
+require 'multi_json'
 
 class Onebox::Engine::WeasylSubmissionOnebox
 	include Onebox::Engine
@@ -21,22 +19,24 @@ class Onebox::Engine::WeasylSubmissionOnebox
 		description = "";
 		imageUrl = "https://cdn.weasyl.com/static/images/logo.png";
 		iconUrl = "https://cdn.weasyl.com/static/images/favicon.png";
+		error_message = "";
 
 		# Weasyl exposes an HTTP API, so we can get JSON objects directly from it.
 		submissionId = @url.match(REGEX)[:id];
 		api_submissionUrl = "https://www.weasyl.com/api/submissions/#{submissionId}/view";
 		title = api_submissionUrl;
 		begin
-			json = ::Net::HTTP.get(::URI.parse(api_submissionUrl));
-			result = ::JSON.parse(json);
+			jsonResponse = Onebox::Helpers::fetch_response(api_submissionUrl);
+			result = ::MultiJson.load(jsonResponse);
 			description = result.try(:[], "description") || description;
 			title = result.try(:[], "title") || title;
 			if !result.try(:[], "media").try(:[], "thumbnail").nil?
 				imageUrl = result.try(:[], "media").try(:[], "thumbnail")[0].try(:[], "url") || imageUrl;
 			end
-		rescue
-			title = "Rating Restricted Submission";
-			description = "This submission information is hidden because it is marked as NSFW.";
+		rescue StandardError => err
+			title = "NSFW Submission";
+			description = "This submission information is hidden. Likely because it is marked as NSFW.";
+			error_message = "#{err.class} - #{err.message} \n\n #{err.backtrace.join('\n')}";
 		end
 
 		<<-HTML
@@ -49,6 +49,7 @@ class Onebox::Engine::WeasylSubmissionOnebox
 						<img src="#{imageUrl}" class="thumbnail size-resolved" />
 						<h3><a href="#{linkUrl}" target="_blank" rel="nofollow noopener">#{title}</a></h3>
 						<p>#{description}</p>
+						<pre hidden>#{error_message}</pre>
 						<div style="clear: both"></div>
 					</article>
 				</aside>
